@@ -10,18 +10,18 @@ class VariantVigenereEncryptor:
                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/']
         self._cipher = None
 
-    def getCipher(self):
+    def get_cipher(self):
         if self._cipher is None:
             raise Exception("Error: Encryptor hasn't encrypted any plaintext yet")
         return self._cipher
 
-    def getCipherBytes(self):
+    def get_cipher_bytes(self):
         if self._cipher is None:
             raise Exception("Error: Encryptor hasn't encrypted any plaintext yet")
         return bytearray(self._cipher, "ascii")
 
     @staticmethod
-    def convertToBase64(flag):
+    def convert_to_base64(flag):
         """
         Covert the flag to a base64 text
         :param str flag: plaintext flag
@@ -32,16 +32,16 @@ class VariantVigenereEncryptor:
         flag_base64 = flag_byte_base64.decode("utf-8")
         return flag_base64
 
-    def getShiftAmount(self, key):
+    def get_shift_amount(self, key):
         """
         Get the shift amount with the give character key
         :param str key: a single letter, digit or +, -
-        :return: int shift_amount: the shift amount with the given key
+        :return: int shiftAmount: the shift amount with the given key
         """
-        shift_amount = self._chars.index(key)
-        return shift_amount
+        shiftAmount = self._chars.index(key)
+        return shiftAmount
 
-    def shiftChar(self, char, shift_amount):
+    def shift_char(self, char, shift_amount):
         """
         Shift the character
         :param str char: character to be shifted
@@ -61,20 +61,20 @@ class VariantVigenereEncryptor:
         :return: null, store the ciphertext in self._cipher
         """
         # convert the flag to base64
-        flag_base64 = self.convertToBase64(plaintext)
+        flag_base64 = self.convert_to_base64(plaintext)
 
         # obtain shift amounts from the key
         keys = list(key)
         shift_amounts = []
         for k in keys:
-            shift_amount = self.getShiftAmount(k)
+            shift_amount = self.get_shift_amount(k)
             shift_amounts.append(shift_amount)
 
         # vigenere encryption
         encrypted_flag = ""
         for i in range(len(flag_base64)):
             round_shift_amount = shift_amounts[i % len(shift_amounts)]
-            encrypted_flag += self.shiftChar(flag_base64[i], round_shift_amount)
+            encrypted_flag += self.shift_char(flag_base64[i], round_shift_amount)
 
         # store the cipher
         self._cipher = encrypted_flag
@@ -82,5 +82,5 @@ class VariantVigenereEncryptor:
 
 # a = VariantVigenereEncryptor()
 # a.encrypt("fcs22{wahhhhhhhh_you_found_the_flag!!!whooohooo}", "counterstrike")
-# print(a.getCipher())
+# print(a.get_cipher())
 # output: 1O7a5B0nKhnM4iJWBz/TGyob/VxHHNqTGS+K/q/B/kAZ2BIOz0pV2urWIUMbIhfh
