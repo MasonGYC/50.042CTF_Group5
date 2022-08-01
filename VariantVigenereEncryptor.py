@@ -36,10 +36,10 @@ class VariantVigenereEncryptor:
         """
         Get the shift amount with the give character key
         :param str key: a single letter, digit or +, -
-        :return: int shiftAmount: the shift amount with the given key
+        :return: int shift_amount: the shift amount with the given key
         """
-        shiftAmount = self._chars.index(key)
-        return shiftAmount
+        shift_amount = self._chars.index(key)
+        return shift_amount
 
     def shift_char(self, char, shift_amount):
         """
