@@ -1,0 +1,4 @@
+P2
+# mona_lisa.ascii.pgm
+250 360
+255
