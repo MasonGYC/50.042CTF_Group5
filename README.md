@@ -12,4 +12,4 @@ How I embed: (I hide it in the first 64 lines, under "r" "w" mode instead of "rb
     ...<br />
     Therefore only the first 64 lines are invloved.<br />
 
-I the embedding.txt got some right-aligned issuem but it really doesn't matter. I have checked that the length of each line is the same(250), it just looks different.
+The embedding.txt got some right-aligned issuem but it really doesn't matter. I have checked that the length of each line is the same(250), it just looks different.
