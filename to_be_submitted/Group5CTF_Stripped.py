@@ -181,6 +181,7 @@ def combine_image(header_file, body_file, combined_file):
 
 
 if __name__ == "__main__":
+    # the fake flag and fake key are of the same length with the real ones
     flag = "fcs22{XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}"
     key = "YYYYYYYYYYYYY"
 
