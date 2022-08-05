@@ -111,17 +111,17 @@ def to_binary(string):
     return m
 
 
-def embed_one(string, input):
-    bits = input.split()
+def embed_one(input_bits, input_line):
+    line_bits = input_line.split()
     for i in range(8):
 
-        temp = bin(int(bits[i]))
+        temp = bin(int(line_bits[i]))
 
-        temp = temp[:-1] + string[i]
+        temp = temp[:-1] + input_bits[i]
 
-        bits[i] = str(int(temp, 2))
+        line_bits[i] = str(int(temp, 2))
 
-    output = ' '.join(bits)
+    output = ' '.join(line_bits)
     return output
 
 
