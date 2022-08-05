@@ -24,22 +24,16 @@ def To_binary(string):
 
 
 def Embeded_one(string, text):
-    print("text = ", text)
     b = text.split()
-    print("string = ", string)
-    print("b = ", b)
     for i in range(8):
         #to binary
         temp = bin(int(b[i]))
-        print("init = ", i, temp)
 
         temp = temp[:-1] + string[i]
-        print("mod = ", i, temp)
 
         b[i] = str(int(temp, 2))
         #convert back 
     new_b = ' '.join(b)
-    print("new_b = ", new_b)
     return new_b
 
 
@@ -75,14 +69,10 @@ def Extract_one(text):
     b = text.split()
     string = ""
     for i in range(8):
-        # to binary
         temp = bin(int(b[i]))
-        print("init = ", i, temp)
 
         string += temp[-1]
 
-        # convert back
-    print(string)
     return string
 
 def Extract(filein):
