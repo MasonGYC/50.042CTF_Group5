@@ -96,8 +96,8 @@ def Extract(filein):
 
     return cipher
 
-Embeded('1O7a5B0nKhnM4iJWBz/TGyob/VxHHNqTGS+K/q/B/kAZ2BIOz0pV2urWIUMbIhfh', 'mona_lisa.ascii.txt', 'embedding.txt')
-print(Extract("embedding.txt"))
+Embeded('1N7Z5A0mJgnL4iIVAz/SFyna/UxGGMpSFR+J/q/A/j=Y2AHNz0pU2uqVHTLaHgeg', 'body_orig.txt', 'embedding_test.txt')
+print(Extract("embedding_test.txt"))
 
 
 
