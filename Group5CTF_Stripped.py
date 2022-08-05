@@ -73,7 +73,7 @@ class VariantVigenere:
         pass
 
 
-def Split_image(filein, header_file, body_file):
+def split_image(filein, header_file, body_file):
     image_in = open(filein, "r")
     header_out = open(header_file, "w")
     body_out = open(body_file, "w")
@@ -98,7 +98,7 @@ def Split_image(filein, header_file, body_file):
     body_out.close()
 
 
-def To_binary(string):
+def to_binary(string):
     l, m = [], []
     for i in string:
         l.append(ord(i))
@@ -111,7 +111,7 @@ def To_binary(string):
     return m
 
 
-def Embed_one(string, text):
+def embed_one(string, text):
     b = text.split()
     for i in range(8):
 
@@ -125,19 +125,19 @@ def Embed_one(string, text):
     return new_b
 
 
-def Embed(cipher, filein, fileout):
+def embed(cipher, filein, fileout):
     fin = open(filein, 'r')
     fout = open(fileout, 'w')
 
-    Binary_list = To_binary(cipher)
+    binary_list = to_binary(cipher)
 
-    round = len(Binary_list)
+    round = len(binary_list)
     start = 0
     text = fin.readline()
     while start < round:
-        string = Binary_list[start]
+        string = binary_list[start]
 
-        to_write = Embed_one(string, text)
+        to_write = embed_one(string, text)
         fout.write(to_write + '\n')
 
         start = start + 1
@@ -152,15 +152,15 @@ def Embed(cipher, filein, fileout):
     fout.close()
 
 
-def Extract_one(text):
+def extract_one(text):
     pass
 
 
-def Extract(filein):
+def extract(filein):
     pass
 
 
-def Combine_image(header_file, body_file, combined_file):
+def combine_image(header_file, body_file, combined_file):
     header_in = open(header_file, "r")
     body_in = open(body_file, "r")
     fileout = open(combined_file, "w")
@@ -189,9 +189,9 @@ if __name__ == "__main__":
     a.encrypt(flag, key)
     ciphertext = a.get_cipher()
 
-    Split_image("mona_lisa.ascii_origin.pgm", "header_orig.txt", "body_orig.txt")
-    Embed(ciphertext, "body_orig.txt", "body_modified.txt")
-    Combine_image("header_orig.txt", "body_modified.txt", "mona_lisa_modified.pgm")
+    split_image("mona_lisa.ascii_origin.pgm", "header_orig.txt", "body_orig.txt")
+    embed(ciphertext, "body_orig.txt", "body_modified.txt")
+    combine_image("header_orig.txt", "body_modified.txt", "mona_lisa_modified.pgm")
 
 
 
