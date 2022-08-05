@@ -111,42 +111,42 @@ def to_binary(string):
     return m
 
 
-def embed_one(string, text):
-    b = text.split()
+def embed_one(string, input):
+    bits = input.split()
     for i in range(8):
 
-        temp = bin(int(b[i]))
+        temp = bin(int(bits[i]))
 
         temp = temp[:-1] + string[i]
 
-        b[i] = str(int(temp, 2))
+        bits[i] = str(int(temp, 2))
 
-    new_b = ' '.join(b)
-    return new_b
+    output = ' '.join(bits)
+    return output
 
 
 def embed(cipher, filein, fileout):
     fin = open(filein, 'r')
     fout = open(fileout, 'w')
 
-    binary_list = to_binary(cipher)
+    cipher_bits = to_binary(cipher)
 
-    round = len(binary_list)
-    start = 0
-    text = fin.readline()
-    while start < round:
-        string = binary_list[start]
+    round = len(cipher_bits)
+    counter = 0
+    input_line = fin.readline()
+    while counter < round:
+        input_bits = cipher_bits[counter]
 
-        to_write = embed_one(string, text)
-        fout.write(to_write + '\n')
+        output_line = embed_one(input_bits, input_line)
+        fout.write(output_line + '\n')
 
-        start = start + 1
-        text = fin.readline()
+        counter = counter + 1
+        input_line = fin.readline()
 
-    while text != '':
-        fout.write(text)
+    while input_line != '':
+        fout.write(input_line)
 
-        text = fin.readline()
+        input_line = fin.readline()
 
     fin.close()
     fout.close()
