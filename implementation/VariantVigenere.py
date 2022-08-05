@@ -1,4 +1,5 @@
 import base64
+from operator import indexOf
 
 
 class VariantVigenere:
@@ -7,7 +8,7 @@ class VariantVigenere:
                        'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                        't', 'u', 'v', 'w', 'x', 'y', 'z',
-                       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/',"="]
+                       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/']
         self._cipher = None
         self._plain = None
 
@@ -92,6 +93,20 @@ class VariantVigenere:
         shift_position = (original_position - shift_amount) % len(self._chars)
         shifted_char = self._chars[shift_position]
         return shifted_char
+        
+    def guess_key_chr(self,cipher_char,plain_char):
+        dist = (indexOf(self._chars,cipher_char) - indexOf(self._chars,plain_char))% len(self._chars)
+        return self._chars[dist]
+    
+    def guess_key(self,cipher,plain):
+        
+        if len(cipher) != len(plain):
+            print("Lengths of ciphertext and plaintext are not equal")
+            raise Exception
+        key = ''
+        for i in range(len(cipher)):
+            key += self.guess_key_chr(cipher[i],plain[i])
+        return key
 
     def encrypt(self, plaintext, key):
         """

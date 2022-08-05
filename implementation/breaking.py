@@ -1,13 +1,16 @@
-from Group5CTF import *
+from EmbedAndExtract import *
+from image_split_combine import *
+from VariantVigenere import *
+
 variantVigenere = VariantVigenere()
 
-Split_image("mona_lisa_modified.pgm", "header_orig.txt", "body_modified.txt")
-ciphertext_recovered = Extract("body_modified.txt")
-
+# Step 1: extract text from image
+split_image("mona_lisa_modified.pgm", "header_orig.txt", "body_modified.txt")
+ciphertext_recovered = extract("body_modified.txt")
 print("ciphertext_recovered = ", ciphertext_recovered) 
 #1O7a5B0nKhnM4iJWBz/TGyob/VxHHNqTGS+K/q/B/kAZ2BIOz0pV2urWIUMbIhfh
 
-# guess the key
+# Step 2: guess the key
 # by mapping the table, we can get the first 8 characters of the key is "counters"
 variantVigenere1 = VariantVigenere()
 # since base64 encode 6 bits at a time instead of 8 bits
