@@ -16,12 +16,12 @@ class VariantVigenere:
         if self._cipher is None:
             raise Exception("Error: Encryptor hasn't encrypted any plaintext yet")
         return self._cipher
-
+    
     def get_plain(self):
         if self._plain is None:
             raise Exception("Error: Decryptor hasn't decrypted any cipher yet")
         return self._plain
-
+    
     def get_cipher_bytes(self):
         if self._cipher is None:
             raise Exception("Error: Encryptor hasn't encrypted any plaintext yet")
@@ -42,17 +42,17 @@ class VariantVigenere:
     @staticmethod
     def base64_to_string(flag_base64):
         """
-        Covert the base64 text to utf-8 flag string
-        :param str flag_base64:flag encoded by base64
+        Covert the base64 text to utf-8 flag string  
+        :param str flag_base64:flag encoded by base64 
         :return: str flag: plaintext flag
         """
-        flag = base64.b64decode(flag_base64).decode()
+        flag = base64.b64decode(flag_base64).decode("utf-8")
         return flag
 
     def get_shift_amount(self, char):
         """
         Get the shift amount with the give character key
-        :param str key: a single letter, digit or +, -, =
+        :param str char: a single letter, digit or +, -, =
         :return: int shift_amount: the shift amount with the given key
         """
         shift_amount = self._chars.index(char)
@@ -81,7 +81,7 @@ class VariantVigenere:
         shift_position = (original_position + shift_amount) % len(self._chars)
         shifted_char = self._chars[shift_position]
         return shifted_char
-
+    
     def shift_char_decrypt(self, char, shift_amount):
         """
         Shift the character for decryption
@@ -93,6 +93,20 @@ class VariantVigenere:
         shift_position = (original_position - shift_amount) % len(self._chars)
         shifted_char = self._chars[shift_position]
         return shifted_char
+        
+    def guess_key_chr(self,cipher_char,plain_char):
+        dist = (indexOf(self._chars,cipher_char) - indexOf(self._chars,plain_char))% len(self._chars)
+        return self._chars[dist]
+    
+    def guess_key(self,cipher,plain):
+        
+        if len(cipher) != len(plain):
+            print("Lengths of ciphertext and plaintext are not equal")
+            raise Exception
+        key = ''
+        for i in range(len(cipher)):
+            key += self.guess_key_chr(cipher[i],plain[i])
+        return key
 
     def encrypt(self, plaintext, key):
         """
@@ -123,7 +137,7 @@ class VariantVigenere:
         :param key: the key of the decryption
         :return: null, store the plaintext in self._plain
         """
-
+        
         # obtain shift amounts from the key
         shift_list = self.get_shift_list(key)
 
@@ -139,179 +153,14 @@ class VariantVigenere:
         # store the plaintext
         self._plain = decrypted_flag
 
-    def guess_key_chr(self,cipher_char,plain_char):
-        dist = (indexOf(self._chars,cipher_char) - indexOf(self._chars,plain_char))% len(self._chars)
-        return self._chars[dist]
-    
-    def guess_key(self,cipher,plain):
-        if len(cipher) != len(plain):
-            print("Lengths of ciphertext and plaintext are not equal")
-            raise Exception
-        key = ''
-        for i in range(len(cipher)):
-            key += self.guess_key_chr(cipher[i],plain[i])
-        return key
 
-
-def Split_image(filein, header_file, body_file):
-    image_in = open(filein, "r")
-    header_out = open(header_file, "w")
-    body_out = open(body_file, "w")
-
-    header = ""
-    body = ""
-
-    next_line = image_in.readline()
-    for i in range(4):
-        header += next_line
-        next_line = image_in.readline()
-
-    while next_line:
-        body += next_line
-        next_line = image_in.readline()
-
-    header_out.write(header)
-    body_out.write(body)
-
-    image_in.close()
-    header_out.close()
-    body_out.close()
-
-
-def To_binary(string):
-    l, m = [], []
-    for i in string:
-        l.append(ord(i))
-    for j in l:
-        m.append(bin(j)[2:])
-    for k in range(len(m)):
-        if len(m[k]) != 8:
-            temp = 8 - len(m[k])
-            m[k] = '0' * temp + m[k]
-    return m
-
-
-def Embed_one(string, text):
-    b = text.split()
-    for i in range(8):
-
-        temp = bin(int(b[i]))
-
-        temp = temp[:-1] + string[i]
-
-        b[i] = str(int(temp, 2))
-
-    new_b = ' '.join(b)
-    return new_b
-
-
-def Embed(cipher, filein, fileout):
-    fin = open(filein, 'r')
-    fout = open(fileout, 'w')
-
-    Binary_list = To_binary(cipher)
-
-    round = len(Binary_list)
-    start = 0
-    text = fin.readline()
-    while start < round:
-        string = Binary_list[start]
-
-        to_write = Embed_one(string, text)
-        fout.write(to_write + '\n')
-
-        start = start + 1
-        text = fin.readline()
-
-    while text != '':
-        fout.write(text)
-
-        text = fin.readline()
-
-    fin.close()
-    fout.close()
-
-
-def Extract_one(text):
-    b = text.split()
-    string = ""
-    for i in range(8):
-        temp = bin(int(b[i]))
-
-        string += temp[-1]
-
-    return string
-
-
-def Extract(filein):
-    fin = open(filein, 'r')
-
-    round = 64
-    start = 0
-    text = fin.readline()
-    cipher_binary = []
-    cipher = ""
-
-    while start < round:
-
-        cipher_binary.append(Extract_one(text))
-
-        start = start + 1
-        text = fin.readline()
-
-    for i in cipher_binary:
-        cipher += chr(int(i, base=2))
-
-    return cipher
-
-
-def Combine_image(header_file, body_file, combined_file):
-    header_in = open(header_file, "r")
-    body_in = open(body_file, "r")
-    fileout = open(combined_file, "w")
-
-    next_header_line = header_in.readline()
-    while next_header_line:
-        fileout.write(next_header_line)
-        next_header_line = header_in.readline()
-
-    next_body_line = body_in.readline()
-    while next_body_line:
-        fileout.write(next_body_line)
-        next_body_line = body_in.readline()
-
-    header_in.close()
-    body_in.close()
-    fileout.close()
-
-
-if __name__ == "__main__":
-    flag = "fcs22{wahhhhhhhh_you_found_the_flag!!!whooohooo}"
-    key = "counterstrike"
-
-    # -------------------- ENCRYPTING --------------------
-    a = VariantVigenere()
-    a.encrypt(flag, key)
-    ciphertext = a.get_cipher()
-
-    print("ciphertext = ", ciphertext)
-
-    Split_image("mona_lisa.ascii_origin.pgm", "header_orig.txt", "body_orig.txt")
-    Embed(ciphertext, "body_orig.txt", "body_modified.txt")
-    Combine_image("header_orig.txt", "body_modified.txt", "mona_lisa_modified.pgm")
-
-    # -------------------- DECRYPTING --------------------
-    # Split_image("mona_lisa_modified.pgm", "header_orig.txt", "body_modified.txt")
-    ciphertext_recovered = Extract("body_modified.txt")
-
-    print("ciphertext_recovered = ", ciphertext_recovered)
-
-    a.decrypt(ciphertext_recovered, key)
-    flag_recovered = a.get_plain()
-
-    print("flag_recovered = ", flag_recovered)
-
-
-
-
-
+a = VariantVigenere()
+flag = "fcs22{wahhhhhhhh_you_found_the_flag!!!whooohooo}"
+key = "counterstrike"
+a.encrypt(flag, key)
+ciphertext = a.get_cipher()
+print(ciphertext)
+a.decrypt(ciphertext, key)
+plaintext = a.get_plain()
+print(plaintext)
+# output: 1N7Z5A0mJgnL4iIVAz/SFyna/UxGGMpSFR+J/q/A/j=Y2AHNz0pU2uqVHTLaHgeg

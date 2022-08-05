@@ -1,4 +1,5 @@
 import base64
+from operator import indexOf
 
 
 class VariantVigenere:
