@@ -1,6 +1,5 @@
 import base64
 
-
 class VariantVigenere:
     def __init__(self):
         self._chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
@@ -142,10 +141,10 @@ class VariantVigenere:
 a = VariantVigenere()
 flag = "fcs22{wahhhhhhhh_you_found_the_flag!!!whooohooo}"
 key = "counterstrike"
-a.encrypt(flag,key)
+a.encrypt(flag, key)
 ciphertext = a.get_cipher()
 print(ciphertext)
-a.decrypt(ciphertext,key)
+a.decrypt(ciphertext, key)
 plaintext = a.get_plain()
 print(plaintext)
 # output: 1O7a5B0nKhnM4iJWBz/TGyob/VxHHNqTGS+K/q/B/kAZ2BIOz0pV2urWIUMbIhfh

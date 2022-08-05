@@ -4,7 +4,7 @@
 
 #helper function
 def To_binary(string):
-    l,m=[],[]
+    l, m = [], []
     for i in string:
         l.append(ord(i))
     for j in l:
@@ -24,16 +24,22 @@ def To_binary(string):
 
 
 def Embeded_one(string, text):
-    b =  text.split()
+    print("text = ", text)
+    b = text.split()
+    print("string = ", string)
+    print("b = ", b)
     for i in range(8):
         #to binary
         temp = bin(int(b[i]))
+        print("init = ", i, temp)
 
         temp = temp[:-1] + string[i]
+        print("mod = ", i, temp)
 
-        b[i] = str(int(temp,2))
+        b[i] = str(int(temp, 2))
         #convert back 
     new_b = ' '.join(b)
+    print("new_b = ", new_b)
     return new_b
 
 
@@ -43,6 +49,7 @@ def Embeded(cipher, filein, fileout):
 
     #convert cipher to binary
     Binary_list = To_binary(cipher)
+
     #start embedding.
     round = len(Binary_list)
     start = 0
@@ -64,8 +71,43 @@ def Embeded(cipher, filein, fileout):
     fin.close()
     fout.close()
 
+def Extract_one(text):
+    b = text.split()
+    string = ""
+    for i in range(8):
+        # to binary
+        temp = bin(int(b[i]))
+        print("init = ", i, temp)
+
+        string += temp[-1]
+
+        # convert back
+    print(string)
+    return string
+
+def Extract(filein):
+    fin = open(filein, 'r')
+
+    round = 64
+    start = 0
+    text = fin.readline()
+    cipher_binary = []
+    cipher = ""
+
+    while start < round:
+
+        cipher_binary.append(Extract_one(text))
+
+        start = start + 1
+        text = fin.readline()
+
+    for i in cipher_binary:
+        cipher += chr(int(i, base=2))
+
+    return cipher
 
 Embeded('1O7a5B0nKhnM4iJWBz/TGyob/VxHHNqTGS+K/q/B/kAZ2BIOz0pV2urWIUMbIhfh', 'mona_lisa.ascii.txt', 'embedding.txt')
+print(Extract("embedding.txt"))
 
 
 
