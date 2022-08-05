@@ -1,5 +1,6 @@
 import base64
 
+
 class VariantVigenere:
     def __init__(self):
         self._chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
@@ -70,6 +71,7 @@ class VariantVigenere:
         self._cipher = encrypted_flag
 
     def decrypt(self, ciphertext, key):
+        """###to be found out###"""
         pass
 
 
@@ -114,11 +116,8 @@ def to_binary(string):
 def embed_one(input_bits, input_line):
     line_bits = input_line.split()
     for i in range(8):
-
         temp = bin(int(line_bits[i]))
-
         temp = temp[:-1] + input_bits[i]
-
         line_bits[i] = str(int(temp, 2))
 
     output = ' '.join(line_bits)
@@ -130,22 +129,18 @@ def embed(cipher, filein, fileout):
     fout = open(fileout, 'w')
 
     cipher_bits = to_binary(cipher)
-
-    round = len(cipher_bits)
+    rounds = len(cipher_bits)
     counter = 0
     input_line = fin.readline()
-    while counter < round:
+    while counter < rounds:
         input_bits = cipher_bits[counter]
-
         output_line = embed_one(input_bits, input_line)
         fout.write(output_line + '\n')
-
         counter = counter + 1
         input_line = fin.readline()
 
     while input_line != '':
         fout.write(input_line)
-
         input_line = fin.readline()
 
     fin.close()
@@ -192,9 +187,3 @@ if __name__ == "__main__":
     split_image("mona_lisa.ascii_origin.pgm", "header_orig.txt", "body_orig.txt")
     embed(ciphertext, "body_orig.txt", "body_modified.txt")
     combine_image("header_orig.txt", "body_modified.txt", "mona_lisa_modified.pgm")
-
-
-
-
-
-
