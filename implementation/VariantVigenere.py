@@ -1,5 +1,6 @@
 import base64
 
+
 class VariantVigenere:
     def __init__(self):
         self._chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
@@ -50,7 +51,7 @@ class VariantVigenere:
     def get_shift_amount(self, char):
         """
         Get the shift amount with the give character key
-        :param str key: a single letter, digit or +, -, =
+        :param str char: a single letter, digit or +, -, =
         :return: int shift_amount: the shift amount with the given key
         """
         shift_amount = self._chars.index(char)
@@ -148,5 +149,3 @@ a.decrypt(ciphertext, key)
 plaintext = a.get_plain()
 print(plaintext)
 # output: 1N7Z5A0mJgnL4iIVAz/SFyna/UxGGMpSFR+J/q/A/j=Y2AHNz0pU2uqVHTLaHgeg
-
-

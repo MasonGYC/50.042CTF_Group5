@@ -1,5 +1,6 @@
 import base64
 
+
 class VariantVigenere:
     def __init__(self):
         self._chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
@@ -70,6 +71,7 @@ class VariantVigenere:
         self._cipher = encrypted_flag
 
     def decrypt(self, ciphertext, key):
+        """###to be found out###"""
         pass
 
 
@@ -111,42 +113,35 @@ def to_binary(string):
     return m
 
 
-def embed_one(string, text):
-    b = text.split()
+def embed_one(input_bits, input_line):
+    line_bits = input_line.split()
     for i in range(8):
+        temp = bin(int(line_bits[i]))
+        temp = temp[:-1] + input_bits[i]
+        line_bits[i] = str(int(temp, 2))
 
-        temp = bin(int(b[i]))
-
-        temp = temp[:-1] + string[i]
-
-        b[i] = str(int(temp, 2))
-
-    new_b = ' '.join(b)
-    return new_b
+    output = ' '.join(line_bits)
+    return output
 
 
 def embed(cipher, filein, fileout):
     fin = open(filein, 'r')
     fout = open(fileout, 'w')
 
-    binary_list = to_binary(cipher)
+    cipher_bits = to_binary(cipher)
+    rounds = len(cipher_bits)
+    counter = 0
+    input_line = fin.readline()
+    while counter < rounds:
+        input_bits = cipher_bits[counter]
+        output_line = embed_one(input_bits, input_line)
+        fout.write(output_line + '\n')
+        counter = counter + 1
+        input_line = fin.readline()
 
-    round = len(binary_list)
-    start = 0
-    text = fin.readline()
-    while start < round:
-        string = binary_list[start]
-
-        to_write = embed_one(string, text)
-        fout.write(to_write + '\n')
-
-        start = start + 1
-        text = fin.readline()
-
-    while text != '':
-        fout.write(text)
-
-        text = fin.readline()
+    while input_line != '':
+        fout.write(input_line)
+        input_line = fin.readline()
 
     fin.close()
     fout.close()
@@ -193,9 +188,3 @@ if __name__ == "__main__":
     split_image("mona_lisa.ascii_origin.pgm", "header_orig.txt", "body_orig.txt")
     embed(ciphertext, "body_orig.txt", "body_modified.txt")
     combine_image("header_orig.txt", "body_modified.txt", "mona_lisa_modified.pgm")
-
-
-
-
-
-
