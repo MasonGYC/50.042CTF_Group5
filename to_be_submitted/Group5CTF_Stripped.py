@@ -7,7 +7,7 @@ class VariantVigenere:
                        'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                        't', 'u', 'v', 'w', 'x', 'y', 'z',
-                       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/', "="]
+                       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/']
         self._cipher = None
         self._plain = None
 
@@ -176,7 +176,6 @@ def combine_image(header_file, body_file, combined_file):
 
 
 if __name__ == "__main__":
-    # the fake flag and fake key are of the same length with the real ones
     flag = "fcs22{XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}"
     key = "YYYYYYYYYYYYY"
 

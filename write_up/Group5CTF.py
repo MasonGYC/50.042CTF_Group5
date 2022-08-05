@@ -1,4 +1,5 @@
 import base64
+from operator import indexOf
 
 
 class VariantVigenere:
@@ -45,7 +46,7 @@ class VariantVigenere:
         :param str flag_base64:flag encoded by base64
         :return: str flag: plaintext flag
         """
-        flag = base64.b64decode(flag_base64).decode("utf-8")
+        flag = base64.b64decode(flag_base64).decode()
         return flag
 
     def get_shift_amount(self, char):
@@ -152,17 +153,11 @@ class VariantVigenere:
         return key
 
 
-def split_image(filein, header_file, body_file):
-    """
-    Split the original image
-    :param filein: image to split
-    :param header_file: the header of the image
-    :param body_file: storing the body of the image
-    :return: null
-    """
+def Split_image(filein, header_file, body_file):
     image_in = open(filein, "r")
     header_out = open(header_file, "w")
     body_out = open(body_file, "w")
+
     header = ""
     body = ""
 
@@ -177,17 +172,13 @@ def split_image(filein, header_file, body_file):
 
     header_out.write(header)
     body_out.write(body)
+
     image_in.close()
     header_out.close()
     body_out.close()
 
 
-def to_binary(string):
-    """
-    Convert a text to the binary representation
-    :param string: the text to be converted to byte binary representation
-    :return: binary representation of the string
-    """
+def To_binary(string):
     l, m = [], []
     for i in string:
         l.append(ord(i))
@@ -200,94 +191,81 @@ def to_binary(string):
     return m
 
 
-def embed_one(cipher_char, text):
-    """
-    :param cipher_char: the char to be embedded
-    :param text: the original text
-    :return: new text after embed
-    """
+def Embed_one(string, text):
     b = text.split()
     for i in range(8):
+
         temp = bin(int(b[i]))
-        temp = temp[:-1] + cipher_char[i]
+
+        temp = temp[:-1] + string[i]
+
         b[i] = str(int(temp, 2))
+
     new_b = ' '.join(b)
     return new_b
 
 
-def embed(cipher, filein, fileout):
-    """
-    Embed a cipher into a txt file
-    :param cipher: the cipher to be embedded
-    :param filein: original txt file
-    :param fileout: embed txt file
-    :return: null
-    """
+def Embed(cipher, filein, fileout):
     fin = open(filein, 'r')
     fout = open(fileout, 'w')
-    binary_cipher = to_binary(cipher)
 
-    rounds = len(binary_cipher)
+    Binary_list = To_binary(cipher)
+
+    round = len(Binary_list)
     start = 0
-    plaintext = fin.readline()
-    while start < rounds:
-        cipher_char = binary_cipher[start]
-        to_write = embed_one(cipher_char, plaintext)
+    text = fin.readline()
+    while start < round:
+        string = Binary_list[start]
+
+        to_write = Embed_one(string, text)
         fout.write(to_write + '\n')
 
         start = start + 1
-        plaintext = fin.readline()
+        text = fin.readline()
 
-    while plaintext != '':
-        fout.write(plaintext)
-        plaintext = fin.readline()
+    while text != '':
+        fout.write(text)
+
+        text = fin.readline()
+
     fin.close()
     fout.close()
 
 
-def extract_one(text):
-    """
-    Extract a cipher char from the text
-    :param text: cipher char to be extracted from
-    :return: extracted char
-    """
+def Extract_one(text):
     b = text.split()
-    char = ""
+    string = ""
     for i in range(8):
         temp = bin(int(b[i]))
-        char += temp[-1]
-    return char
+
+        string += temp[-1]
+
+    return string
 
 
-def extract(filein):
-    """
-    Extract the cipher from a txt file
-    :param filein: file with cipher embedded
-    :return: extracted cipher
-    """
+def Extract(filein):
     fin = open(filein, 'r')
-    rounds = 64
+
+    round = 64
     start = 0
     text = fin.readline()
     cipher_binary = []
     cipher = ""
 
-    while start < rounds:
-        cipher_binary.append(extract_one(text))
+    while start < round:
+
+        cipher_binary.append(Extract_one(text))
+
         start = start + 1
         text = fin.readline()
+
     for i in cipher_binary:
         cipher += chr(int(i, base=2))
+
     return cipher
 
 
-def combine_image(header_file, body_file, combined_file):
-    """
-    :param header_file: image header
-    :param body_file: image body
-    :param combined_file: storing the combined image
-    :return: null
-    """
+def Combine_image(header_file, body_file, combined_file):
     header_in = open(header_file, "r")
     body_in = open(body_file, "r")
     fileout = open(combined_file, "w")
@@ -310,20 +288,30 @@ def combine_image(header_file, body_file, combined_file):
 if __name__ == "__main__":
     flag = "fcs22{wahhhhhhhh_you_found_the_flag!!!whooohooo}"
     key = "counterstrike"
+
     # -------------------- ENCRYPTING --------------------
     a = VariantVigenere()
     a.encrypt(flag, key)
     ciphertext = a.get_cipher()
+
     print("ciphertext = ", ciphertext)
 
-    split_image("mona_lisa.ascii_origin.pgm", "header_orig.txt", "body_orig.txt")
-    embed(ciphertext, "body_orig.txt", "body_modified.txt")
-    combine_image("header_orig.txt", "body_modified.txt", "mona_lisa_modified.pgm")
+    Split_image("mona_lisa.ascii_origin.pgm", "header_orig.txt", "body_orig.txt")
+    Embed(ciphertext, "body_orig.txt", "body_modified.txt")
+    Combine_image("header_orig.txt", "body_modified.txt", "mona_lisa_modified.pgm")
 
     # -------------------- DECRYPTING --------------------
     # Split_image("mona_lisa_modified.pgm", "header_orig.txt", "body_modified.txt")
-    ciphertext_recovered = extract("body_modified.txt")
+    ciphertext_recovered = Extract("body_modified.txt")
+
     print("ciphertext_recovered = ", ciphertext_recovered)
+
     a.decrypt(ciphertext_recovered, key)
     flag_recovered = a.get_plain()
+
     print("flag_recovered = ", flag_recovered)
+
+
+
+
+
